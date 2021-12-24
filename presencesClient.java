@@ -4,20 +4,17 @@ import java.io.*;
 
 public class presencesClient {
 
-	static final int SI_PORTO = 2000; 
-	static final String SI_HOST = "127.0.0.1"; //IP e PORTO do Serviço de Identificação
+	static final int SI_PORTO = 2000;
+	static final String SI_HOST = "127.0.0.1"; // IP e PORTO do Serviço de Identificação
 
 	public static void main(String[] args) throws IOException {
 		String servidor = SI_HOST;
 		int porto = SI_PORTO;
 
-
-
 		if (args.length != 2) {
 			System.out.println("Erro: use java presencesClient <ip> <Identificador Unico>");
 			System.exit(-1);
 		}
-
 
 		// Create a representation of the IP address of the Server: API
 		// java.net.InetAddress
@@ -31,7 +28,6 @@ public class presencesClient {
 		ligacao = new Socket(serverAddress, porto);
 
 		try {
-
 
 			// Create a java.io.BufferedReader for the Socket; Use
 			// java.io.Socket.getInputStream() to obtain the Socket input stream
@@ -51,24 +47,27 @@ public class presencesClient {
 
 			String msg;
 
-
 			// Read the server response - read the data until null
-			
-/*
-			while((msg= in.readLine())!=null){
-				System.out.println(msg);
+
+			/*
+			 * while((msg= in.readLine())!=null){ System.out.println(msg); }
+			 * 
+			 */
+			int length = 0;
+			while ((msg = in.readLine()) != null) {
+				if (length == 0) {
+					System.out.println("\nChave de Acesso: " + msg + "\n");
+				}
+				if (length == 1) {
+					System.out.println("Ip do Servico de Tickting: " + msg + "\n");
+				} else {
+					if (length == 2) {
+						System.out.println("Porto do Servico de Ticketing: " + msg + "\n");
+					}
+				}
+				length += 1;
 			}
 
-			*/
-			int length=0;
-			while((msg = in.readLine())!= null){
-			if(length == 0) {System.out.println("\nChave de Acesso: " +msg +"\n");}
-			if(length == 1) {System.out.println("Ip do Servico de Tickting: " +msg +"\n");}
-			else {if (length ==2) {System.out.println("Porto do Servico de Ticketing: " + msg +"\n");}
-			}
-			length+=1;
-  			  }
-		
 			// Close the Socket
 			ligacao.close();
 

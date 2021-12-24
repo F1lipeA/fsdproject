@@ -33,18 +33,21 @@ public class GetTicketingRequestHandler extends Thread {
         try {
             System.out.println("Aceitou ligacao de cliente no endereco " + ligacao.getInetAddress() + " na porta "
                     + ligacao.getPort());
+
             String response;
-            String response2;
-            int length = 0;
             String msg = in.readLine();
+
             System.out.println("Request=" + msg);
 
             StringTokenizer tokens = new StringTokenizer(msg);
             String metodo = tokens.nextToken();
+
             if (metodo.equals("get")) {
                 String ip = tokens.nextToken();
                 String identificador = tokens.nextToken();
+
                 response = "101\n";
+
                 try {
                     MessageDigest md = MessageDigest.getInstance("MD5");
 
@@ -57,10 +60,14 @@ public class GetTicketingRequestHandler extends Thread {
                     while (hashtext.length() < 32) {
                         hashtext = "0" + hashtext;
                     }
-                    response2 = hashtext + "\n";
-                    response2 += ST_HOST + "\n";
-                    response2 += ST_PORTO;
-                    out.println(response2);
+
+                    if (hashtext.equals(identificador)) {
+                        // CRIAR UMA FUNÇÃO PARA IMPRIMIR LISTA DE SERVIÇOS
+                        System.out.println("Selecione o serviço ao qual pretende aceder");
+                        System.out.println("\n 1 - Serviço de Humidade \n");
+                        System.out.println("\n 2 - Serviço de Temperatura \n");
+
+                    }
 
                 } catch (NoSuchAlgorithmException e) {
                     System.err.println("I'm sorry, but MD5 is not a valid message digest algorithm");
