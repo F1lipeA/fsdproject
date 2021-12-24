@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-public class presencesServer {
+public class IdentificationService {
 	static int DEFAULT_PORT = 2000;
 
 	public static void main(String[] args) throws IOException {
@@ -26,7 +26,7 @@ public class presencesServer {
 				Socket ligacao = servidor.accept();
 
 				// Start a GetPresencesRequestHandler thread
-				GetPresencesRequestHandler request = new GetPresencesRequestHandler(ligacao, presences);
+				GetIdentificationRequestHandler request = new GetIdentificationRequestHandler(ligacao, presences);
 				request.start();
 
 			} catch (IOException e) {

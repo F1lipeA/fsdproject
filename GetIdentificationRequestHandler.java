@@ -7,7 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
-public class GetPresencesRequestHandler extends Thread {
+public class GetIdentificationRequestHandler extends Thread {
 	Socket ligacao;
 	Presences presences;
 	BufferedReader in;
@@ -16,7 +16,7 @@ public class GetPresencesRequestHandler extends Thread {
 	static final int ST_PORTO = 3122;
 	static final String ST_HOST = "127.0.0.2"; // IP e PORTO do Serviço de Ticketing
 
-	public GetPresencesRequestHandler(Socket ligacao, Presences presences) {
+	public GetIdentificationRequestHandler(Socket ligacao, Presences presences) {
 		this.ligacao = ligacao;
 		this.presences = presences;
 		try {
@@ -45,31 +45,30 @@ public class GetPresencesRequestHandler extends Thread {
 				String ip = tokens.nextToken();
 				String identificador = tokens.nextToken();
 				response = "101\n";
-				try{
-            	MessageDigest md = MessageDigest.getInstance("MD5");
+				try {
+					MessageDigest md = MessageDigest.getInstance("MD5");
 
-            	byte[] messageDigest = md.digest(identificador.getBytes());
+					byte[] messageDigest = md.digest(identificador.getBytes());
 
-	            BigInteger no = new BigInteger(1, messageDigest);
+					BigInteger no = new BigInteger(1, messageDigest);
 
-    	        String hashtext = no.toString(16);
+					String hashtext = no.toString(16);
 
-        	    while (hashtext.length() < 32) {
-        	        hashtext = "0" + hashtext;
-        	    }
-        	    response2 = hashtext +"\n";
-        	    response2 += ST_HOST + "\n";
-				response2 += ST_PORTO;
-				out.println(response2);
+					while (hashtext.length() < 32) {
+						hashtext = "0" + hashtext;
+					}
+					response2 = hashtext + "\n";
+					response2 += ST_HOST + "\n";
+					response2 += ST_PORTO;
+					out.println(response2);
 
-        		}
-            	catch (NoSuchAlgorithmException e) {
-       				 System.err.println("I'm sorry, but MD5 is not a valid message digest algorithm");
-    			}
+				} catch (NoSuchAlgorithmException e) {
+					System.err.println("I'm sorry, but MD5 is not a valid message digest algorithm");
+				}
 
-				//response2 = hashtext +"\n";
-				//response2 += ST_HOST + "\n";
-				//response2 += ST_PORTO;
+				// response2 = hashtext +"\n";
+				// response2 += ST_HOST + "\n";
+				// response2 += ST_PORTO;
 				Vector<String> ipList = presences.getPresences(ip);
 				response += ipList.size() + "\n";
 				for (Iterator<String> it = ipList.iterator(); it.hasNext();) {
@@ -77,7 +76,7 @@ public class GetPresencesRequestHandler extends Thread {
 					response += next + ";";
 				}
 				System.out.println(response);
-				//out.println(response2);
+				// out.println(response2);
 			} else
 				out.println("201;method not found");
 
